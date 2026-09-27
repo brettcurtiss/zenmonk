@@ -1,0 +1,11 @@
+# markdownlint rules tuned for Zensical / Material-style Markdown
+default: true
+MD007:
+  indent: 4          # nested lists use 4 spaces (Python-Markdown requirement)
+MD013: false         # no hard line-length limit
+MD024:
+  siblings_only: true
+MD030: false         # grid cards & code annotations use wider list-marker spacing
+MD033: false         # allow inline HTML (grid cards, md_in_html)
+MD041: false         # front matter / snippets may precede the first heading
+MD046: false         # admonitions & tabs use indented blocks
