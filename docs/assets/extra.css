@@ -13,3 +13,11 @@
 .sev-2 { background: #ef6c00; }
 .sev-3 { background: #f9a825; color: #000; }
 .sev-4 { background: #546e7a; }
+
+/* Content marked for the PDF only. Scoped to screen because prodockit
+   also feeds this stylesheet to the (print-media) PDF renderer. */
+@media screen {
+  .pdf-only {
+    display: none !important;
+  }
+}

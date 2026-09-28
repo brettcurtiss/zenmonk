@@ -1,0 +1,32 @@
+/* Project PDF overrides - loaded after prodockit's pdk-pdf.css.
+   Only used by `pdk pdf`; never served to the website. */
+
+/* Keep tall Mermaid diagrams (e.g. the incident lifecycle) on one page. */
+img[alt="Mermaid diagram"] {
+  max-height: 15cm !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  width: auto !important;
+  display: block !important;
+  margin-inline: auto !important;
+}
+
+/* Cover page */
+.cover-subtitle {
+  font-size: 14pt !important;
+  color: #555555 !important;
+  margin-top: 0.5cm !important;
+}
+.cover-meta, .cover-release {
+  margin-top: 0.3cm !important;
+  font-size: 10pt !important;
+  color: #555555 !important;
+}
+.cover-meta {
+  margin-top: 3cm !important;
+}
+
+/* Runbook steps and code blocks should not split awkwardly */
+.admonition, pre, table {
+  break-inside: avoid;
+}

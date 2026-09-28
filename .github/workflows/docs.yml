@@ -2,36 +2,82 @@ name: Documentation
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: docs-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  build:
+    name: Build site + PDF
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      # Full history so prodockit can stamp "Updated on" dates per page.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Native libraries WeasyPrint needs to render the PDF.
+      - name: Install PDF system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --no-default-groups --group docs --group pdf
+
+      # prodockit downloads verified Pandoc, fonts and a Mermaid renderer
+      # into .prodockit/cache/pdf on first use; cache them between runs.
+      - name: Cache PDF runtimes
+        uses: actions/cache@v6
+        with:
+          path: .prodockit/cache/pdf
+          key: pdk-pdf-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pdk-pdf.toml', 'pdf-requirements.txt', 'uv.lock') }}
+
+      - name: Build site
+        run: uv run --no-sync zensical build --clean --strict
+
+      # Reads the built site and writes the PDF into both docs/ and site/.
+      - name: Build PDF
+        run: uv run --no-sync pdk pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: zenmonk-kiosk-runbooks-pdf
+          path: site/zenmonk-kiosk-runbooks.pdf
+          if-no-files-found: error
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
   deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/configure-pages@v6
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
-      - name: Install dependencies
-        run: uv sync --locked --only-group docs
-      - name: Build site
-        run: uv run --no-sync zensical build --clean
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: site
       - uses: actions/deploy-pages@v5
         id: deployment

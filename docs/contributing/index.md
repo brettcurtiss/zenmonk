@@ -14,6 +14,21 @@ uv run pre-commit install    # enable lint hooks on commit
 uv run zensical serve        # live preview at http://localhost:8000
 ```
 
+## Build the PDF
+
+The whole site is also compiled into one PDF with [prodockit](https://prodockit.org/). You need Pango installed once (`brew install pango` on macOS).
+
+```bash
+uv run zensical build --clean
+uv run pdk pdf
+open docs/zenmonk-kiosk-runbooks.pdf
+```
+
+- Page order follows `nav` in `zensical.toml`. The home page becomes the cover.
+- To leave a page out of the PDF, add `pdf_include: false` to its front matter.
+- Use `class="web-only"` for content that should appear only on the website (such as the download button), and `pdf-only` for content that should appear only in the PDF.
+- Page size, margins and the contents page are set in `pdk-pdf.toml`. Print styling goes in `docs/stylesheets/print.css`.
+
 ## Workflow
 
 1. Branch from `dev`, for example `docs/runbook-badge-reader`.

@@ -9,8 +9,22 @@ hide:
 
 Operational documentation for **ZenMonk Kiosk**, the React-based touch-screen application our customers use at check-in and self-service kiosks.
 
+<div class="pdf-only" markdown>
+
+<p class="cover-subtitle">IT operations runbooks, incident process and reference</p>
+
+<p class="cover-meta">Source: {REPOURL}</p>
+
+<p class="cover-release">Release: {RELEASE}</p>
+
+</div>
+
+<a class="md-button md-button--primary web-only" href="zenmonk-kiosk-runbooks.pdf" download>:lucide-file-down: Download PDF</a>
+
 !!! warning "Demo content"
     This site is a demonstration. Company names, hostnames, commands and contact details are fictional.
+
+<div class="web-only" markdown>
 
 ## Start here
 
@@ -59,3 +73,5 @@ Operational documentation for **ZenMonk Kiosk**, the React-based touch-screen ap
 | "Offline mode" banner, orders not syncing | [Kiosk offline](runbooks/kiosk-offline.md) | SEV-3 |
 | Spinners, slow screens, timeouts | [Slow UI / API latency](runbooks/slow-ui.md) | SEV-2 |
 | Problems right after a release | [Deploy & rollback](runbooks/deploy-rollback.md) | SEV-2 |
+
+</div>

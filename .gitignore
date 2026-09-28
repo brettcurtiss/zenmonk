@@ -12,3 +12,8 @@ __pycache__/
 .idea/
 .vscode/
 *.swp
+
+# prodockit PDF build (generated)
+.prodockit/
+docs/.prodockit-pdf-mermaid/
+docs/*.pdf

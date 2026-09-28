@@ -1,0 +1,30 @@
+# PDF settings for `pdk pdf` (prodockit). See https://prodockit.org/pdf/
+schema_version = 1
+
+[document]
+output = "docs/zenmonk-kiosk-runbooks.pdf"
+copyright = "ZenMonk IT Operations &middot; Demo content"
+page_size = "Letter"
+double_sided = false
+# pdk-pdf.css is managed by prodockit; print.css holds our own overrides.
+extra_css = [
+  "stylesheets/pdk-pdf.css",
+  "stylesheets/print.css",
+]
+
+[margins]
+top = "2cm"
+right = "2cm"
+bottom = "2.5cm"
+left = "2cm"
+inner = "2cm"
+outer = "2cm"
+
+[header_footer]
+font_size = "9pt"
+color = "#555555"
+divider_color = "#e2e8f0"
+
+[table_of_contents]
+include = true
+title = "Contents"
